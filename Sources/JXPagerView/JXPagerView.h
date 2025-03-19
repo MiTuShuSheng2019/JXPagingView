@@ -108,6 +108,8 @@
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
 - (void)reloadData;
+/// LY新增 刷新，视图不滚动
+- (void)yy_reloadData;
 - (void)resizeTableHeaderViewHeightWithAnimatable:(BOOL)animatable duration:(NSTimeInterval)duration curve:(UIViewAnimationCurve)curve;
 
 @end

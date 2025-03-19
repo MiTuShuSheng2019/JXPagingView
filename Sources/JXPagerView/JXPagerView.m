@@ -111,6 +111,34 @@
     [self.listContainerView reloadData];
 }
 
+- (void)yy_reloadData {
+    self.currentList = nil;
+    self.currentScrollingListView = nil;
+    [_validListDict removeAllObjects];
+    //根据新数据删除不需要的list
+    if (self.allowsCacheList) {
+        NSMutableArray *newListIdentifierArray = [NSMutableArray array];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(numberOfListsInPagerView:)]) {
+            NSInteger listCount = [self.delegate numberOfListsInPagerView:self];
+            for (NSInteger index = 0; index < listCount; index ++) {
+                if (self.delegate && [self.delegate respondsToSelector:@selector(pagerView:listIdentifierAtIndex:)]) {
+                    NSString *listIdentifier = [self.delegate pagerView:self listIdentifierAtIndex:index];
+                    [newListIdentifierArray addObject:listIdentifier];
+                }
+            }
+        }
+        NSArray *existedKeys = self.listCache.allKeys;
+        for (NSString *listIdentifier in existedKeys) {
+            if (![newListIdentifierArray containsObject:listIdentifier]) {
+                [self.listCache removeObjectForKey:listIdentifier];
+            }
+        }
+    }
+    [self refreshTableHeaderView];
+    [self.mainTableView reloadData];
+    [self.listContainerView reloadData];
+}
+
 - (void)resizeTableHeaderViewHeightWithAnimatable:(BOOL)animatable duration:(NSTimeInterval)duration curve:(UIViewAnimationCurve)curve {
     if (animatable) {
         UIViewAnimationOptions options = UIViewAnimationOptionCurveLinear;
